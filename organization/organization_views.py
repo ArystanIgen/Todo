@@ -58,6 +58,14 @@ class OrganizationDetailViewSet(viewsets.GenericViewSet):
 
     filter_backends = [filters.ObjectPermissionsFilter]
 
+    def get_object(self):
+        organization_id = self.kwargs['organization_id']
+        obj = Organization.objects.get_organization_by_uuid(uuid=organization_id)
+        if obj is None:
+            raise OrganizationNotFoundError
+        self.check_object_permissions(self.request, obj)
+        return obj
+
     @action(methods=['GET'], detail=True)
     def retrieve(self, request, organization_id: str = None):
         fetched_organization: Organization = Organization.objects.get_organization_by_uuid(
@@ -65,19 +73,12 @@ class OrganizationDetailViewSet(viewsets.GenericViewSet):
         )
         if fetched_organization is None:
             raise OrganizationNotFoundError
-        self.check_object_permissions(request, fetched_organization)
-
         serializer = self.serializer_class(fetched_organization)
         return Response(serializer.data)
 
     @action(methods=['DELETE'], detail=True)
     def destroy(self, request, organization_id: str = None):
-        fetched_organization: Organization = Organization.objects.get_organization_by_uuid(
-            uuid=organization_id
-        )
-        if fetched_organization is None:
-            raise OrganizationNotFoundError
-        self.check_object_permissions(request, fetched_organization)
+        fetched_organization = self.get_object()
         fetched_organization.delete()
         return Response(
             {'status_message': 'Organization has been removed successfully.'},
@@ -89,17 +90,19 @@ class OrganizationInviteViewSet(viewsets.GenericViewSet):
     queryset = Organization.objects.all()
     serializer_class = OrganizationInviteSerializer
     permission_classes = (CustomObjectPermissions,)
-
     filter_backends = [filters.ObjectPermissionsFilter]
 
-    @action(methods=['POST'], detail=True)
-    def invite(self, request, organization_id: str):
-        fetched_organization: Organization = Organization.objects.get_organization_by_uuid(
-            uuid=organization_id
-        )
-        if fetched_organization is None:
+    def get_object(self):
+        organization_id = self.kwargs['organization_id']
+        obj = Organization.objects.get_organization_by_uuid(uuid=organization_id)
+        if obj is None:
             raise OrganizationNotFoundError
-        self.check_object_permissions(request, fetched_organization)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    @action(methods=['POST'], detail=False)
+    def invite(self, request, organization_id: str):
+        fetched_organization = self.get_object()
         serializer = OrganizationInviteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

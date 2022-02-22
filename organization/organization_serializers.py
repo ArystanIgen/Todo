@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from organization.models import Organization
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, User, Permission
 from auth_.serializers import UserSerializer
 from rest_framework_guardian.serializers import ObjectPermissionsAssignmentMixin
 
@@ -18,15 +18,20 @@ class OrganizationSerializer(ObjectPermissionsAssignmentMixin, serializers.Model
         support = Group.objects.create(name=f"{self.data['name']}_support")
         viewer = Group.objects.create(name=f"{self.data['name']}_viewer")
         current_user.groups.add(founder)
+
+        fetched_permissions = Permission.objects.filter(codename__endswith="task")
+        view_permission = Permission.objects.filter(codename='view_task').first()
+        founder.permissions.set(fetched_permissions)
+        support.permissions.set(fetched_permissions)
+        viewer.permissions.add(view_permission)
+
         return {
             'view_organization': [founder, support, viewer],
             'change_organization': [founder],
             'delete_organization': [founder],
             'add_organization': [founder],
-            'view_task': [founder, support, viewer],
-            'change_task': [founder, support],
-            'add_task': [founder, support],
-            'delete_task': [founder, support]
+            'create_task': [founder, support],
+            'read_task': [founder, support, viewer],
         }
 
 

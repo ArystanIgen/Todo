@@ -17,3 +17,15 @@ class CustomObjectPermissions(permissions.DjangoObjectPermissions):
         if request.method in ['DELETE']:
             return request.user.has_perm('delete_organization', obj)
         return False
+
+
+class TaskObjectPermissions(permissions.DjangoObjectPermissions):
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in ['GET']:
+            return request.user.has_perm('read_task', obj)
+        if request.method in ['POST']:
+            return request.user.has_perm('create_task', obj)
+        if request.method in ['DELETE']:
+            return request.user.has_perm('create_task', obj)
+        return False

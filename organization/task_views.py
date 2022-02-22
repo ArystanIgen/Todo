@@ -8,9 +8,9 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from organization.exceptions import OrganizationExistsError, OrganizationNotFoundError
-from organization.models import Organization
-from organization.organization_serializers import OrganizationSerializer, OrganizationInviteSerializer
-from organization.permissions import CustomObjectPermissions
+from organization.models import Organization, Task
+from organization.task_serializers import TaskSerializer
+from organization.permissions import CustomObjectPermissions, TaskObjectPermissions
 from rest_framework_guardian import filters
 
 # from main.permissions import PublisherPermission, AuthorPermission
@@ -18,34 +18,71 @@ from rest_framework_guardian import filters
 logger = logging.getLogger(__name__)
 
 
-class OrganizationViewSet(viewsets.GenericViewSet):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+class TaskViewSet(viewsets.GenericViewSet):
+    serializer_class = TaskSerializer
+    permission_classes = (TaskObjectPermissions,)
 
-    def get_permissions(self):
-        if self.action == "create":
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
+    filter_backends = [filters.ObjectPermissionsFilter]
+
+    def get_object(self):
+        organization_id = self.kwargs['organization_id']
+        obj = Organization.objects.get_organization_by_uuid(uuid=organization_id)
+        if obj is None:
+            raise OrganizationNotFoundError
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        return Task.objects.get_tasks_by_organization(organization=self.get_object())
 
     @action(methods=['GET'], detail=False)
-    def list(self, request):
-        serializer = OrganizationSerializer(self.get_queryset(), many=True)
+    def list(self, organization_id: str = None):
+        serializer = TaskSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
     @action(methods=['POST'], detail=False)
-    def create(self, request):
-        fetched_organization: Organization = Organization.objects.get_organization_by_name(
-            name=request.data['name']
-        )
-        if fetched_organization:
-            raise OrganizationExistsError
-        serializer = OrganizationSerializer(data=request.data)
-        serializer.owner = request.user
+    def create(self, request, organization_id: str = None):
+        serializer = TaskSerializer(data=request.data)
+        serializer.user_id = request.user.id
+        fetched_organization = self.get_object()
+        serializer.organization_id = fetched_organization.uuid
+        serializer.organization_name = fetched_organization.name
         if serializer.is_valid():
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         logger.warning(f"Score object cannot created/updated, errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TaskDetailViewSet(viewsets.GenericViewSet):
+    serializer_class = TaskSerializer
+    permission_classes = (TaskObjectPermissions,)
+
+    filter_backends = [filters.ObjectPermissionsFilter]
+
+    def get_object(self):
+        organization_id = self.kwargs['organization_id']
+        task_id = self.kwargs['task_id']
+        obj = Organization.objects.get_organization_by_uuid(uuid=organization_id)
+        if obj is None:
+            raise OrganizationNotFoundError
+        self.check_object_permissions(self.request, obj)
+        fetched_task = Task.objects.get_task_by_uuid(uuid=task_id)
+        return fetched_task
+
+    def get_queryset(self):
+        return Task.objects.get_tasks_by_organization(organization=self.get_object())
+
+    @action(methods=['GET'], detail=True)
+    def retrieve(self, request, organization_id: str = None, task_id: str = None):
+        serializer = self.serializer_class(self.get_object())
+        return Response(serializer.data)
+
+    @action(methods=['DELETE'], detail=True)
+    def destroy(self, request, organization_id: str = None, task_id: str = None):
+        fetched_task = self.get_object()
+        fetched_task.delete()
+        return Response(
+            {'status_message': 'Organization has been removed successfully.'},
+            status=status.HTTP_200_OK
+        )
