@@ -1,0 +1,8 @@
+USER_ROLE_SUPER_USER = 1
+USER_ROLE_PUBLISHER = 2
+USER_ROLE_AUTHOR = 3
+USER_ROLES = (
+    (USER_ROLE_SUPER_USER, 'super admin'),
+    (USER_ROLE_PUBLISHER, 'publisher'),
+    (USER_ROLE_AUTHOR, 'author'),
+)
