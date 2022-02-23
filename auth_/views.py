@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -22,7 +21,7 @@ class RegistrationAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        logger.info(f"Registered new user, user: {user}")
+        logger.info(f"Registered new user, user: {user['username']}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

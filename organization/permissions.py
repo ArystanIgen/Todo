@@ -4,10 +4,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class CustomObjectPermissions(permissions.DjangoObjectPermissions):
+class OrganizationObjectPermissions(permissions.DjangoObjectPermissions):
 
     def has_object_permission(self, request, view, obj):
-        print("Objectdmfsdf")
         if request.method in ['GET']:
             return request.user.has_perm('view_organization', obj)
         if request.method in ['POST']:
@@ -23,9 +22,9 @@ class TaskObjectPermissions(permissions.DjangoObjectPermissions):
 
     def has_object_permission(self, request, view, obj):
         if request.method in ['GET']:
-            return request.user.has_perm('read_task', obj)
+            return request.user.has_perm('read_project', obj)
         if request.method in ['POST']:
-            return request.user.has_perm('create_task', obj)
+            return request.user.has_perm('create_project', obj)
         if request.method in ['DELETE']:
-            return request.user.has_perm('create_task', obj)
+            return request.user.has_perm('create_project', obj)
         return False

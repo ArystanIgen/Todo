@@ -7,7 +7,12 @@ logger = logging.getLogger(__name__)
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=120, min_length=8, write_only=True, validators=[validate_password])
+    password = serializers.CharField(
+        max_length=120,
+        min_length=8,
+        write_only=True,
+        validators=[validate_password]
+    )
 
     class Meta:
         model = User
@@ -23,7 +28,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-    password1 = serializers.CharField(required=True, validators=[validate_password], write_only=True)
+    password1 = serializers.CharField(
+        required=True,
+        validators=[validate_password],
+        write_only=True
+    )
     password2 = serializers.CharField(required=True, write_only=True)
     old_password = serializers.CharField(required=True, write_only=True)
 
@@ -43,9 +52,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-
         user = self.context['request'].user
-
         if user.pk != instance.pk:
             raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
 
@@ -68,7 +75,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         user = self.context['request'].user
         if Profile.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError({"email": "This email is already in use."})
+            raise serializers.ValidationError(
+                {"email": "This email is already in use."}
+            )
         return value
 
     def validate_username(self, value):
@@ -80,7 +89,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
         if user.profile.pk != instance.pk:
             logger.error('Other person tried to enter!')
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+            raise serializers.ValidationError(
+                {"authorize": "You dont have permission for this user."}
+            )
 
         instance.first_name = validated_data['first_name']
         instance.last_name = validated_data['last_name']

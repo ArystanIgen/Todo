@@ -1,35 +1,34 @@
-from django.urls import path, include
-from rest_framework.urlpatterns import format_suffix_patterns
-from organization import organization_views, task_views
-from rest_framework.routers import DefaultRouter
+from django.urls import path
+from organization.views.organization import OrganizationDetailViewSet, OrganizationViewSet, OrganizationInviteViewSet
+from organization.views.project import ProjectViewSet, ProjectDetailViewSet
 
 app_name = 'organization'
 
 urlpatterns = [
-    path('', organization_views.OrganizationViewSet.as_view(
+    path('', OrganizationViewSet.as_view(
         {
             'get': 'list',
             'post': 'create'
         }
     )),
-    path('<str:organization_id>/', organization_views.OrganizationDetailViewSet.as_view(
+    path('<str:organization_id>/', OrganizationDetailViewSet.as_view(
         {
             'get': 'retrieve',
             'delete': 'destroy',
         }
     )),
-    path('<str:organization_id>/invite', organization_views.OrganizationInviteViewSet.as_view(
+    path('<str:organization_id>/invite', OrganizationInviteViewSet.as_view(
         {
             'post': 'invite',
         }
     )),
-    path('<str:organization_id>/tasks', task_views.TaskViewSet.as_view(
+    path('<str:organization_id>/tasks', ProjectViewSet.as_view(
         {
             'post': 'create',
             'get': 'list'
         }
     )),
-    path('<str:organization_id>/tasks/<str:task_id>', task_views.TaskDetailViewSet.as_view(
+    path('<str:organization_id>/tasks/<str:project_id>', ProjectDetailViewSet.as_view(
         {
             'get': 'retrieve',
             'delete': 'destroy',

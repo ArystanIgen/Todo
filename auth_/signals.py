@@ -5,12 +5,12 @@ from auth_.models import Profile
 
 
 @receiver(post_delete, sender=Profile)
-def delete_user(sender, instance, **kwargs):
+def delete_user(sender, instance, **kwargs) -> None:
     user = User.objects.get(id=instance.user.id)
     user.delete()
 
 
 @receiver(post_save, sender=User)
-def user_created(sender, instance, created, **kwargs):
+def user_created(sender, instance, created, **kwargs) -> None:
     if created:
         Profile.objects.create(user=instance)

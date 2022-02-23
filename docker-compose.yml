@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+    - 6444:5432
+
+  app:
+    build: .
+    volumes:
+      - .:/todo_service
+    depends_on:
+      - db
+      - rabbitmq
+      - celery
+    networks:
+      - default
+      - common-net
+    ports:
+    - 8000:8000
+
+  rabbitmq:
+    image: rabbitmq:3.8.18-management
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - default
+      - common-net
+
+
+  celery:
+     build: .
+     volumes:
+        - .:/todo_service
+     environment:
+        CELERY_BROKER_HOST: rabbitmq
+        CELERY_BROKER_PORT: 5672
+        CELERY_BROKER_URL: amqp://rabbitmq:rabbitmq@rabbitmq:5672
+        CELERY_RESULT_BACKEND: rpc://
+     depends_on:
+        - rabbitmq
+        - db
+     command: bash -c "celery -A todo worker --beat --scheduler django --loglevel=info"
+     networks:
+        - default
+        - common-net
+
+networks:
+  default:
+    driver: bridge
+  common-net:
+    external: true

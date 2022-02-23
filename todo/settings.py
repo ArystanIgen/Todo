@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_jwt',
+    'django_celery_beat',
     'debug_toolbar',
     'guardian',
     'organization',
@@ -87,8 +88,12 @@ WSGI_APPLICATION = 'todo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
@@ -217,5 +222,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 #
-# AUTH_USER_MODEL = 'auth_.MainUser'
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_HOST = "rabbitmq"
+CELERY_BROKER_PORT = 5672
+CELERY_BROKER_URL = "amqp://rabbitmq:rabbitmq@rabbitmq:5672"
+CELERY_RESULT_BACKEND = "rpc://"
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Almaty'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.mail.ru"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'no-reply-orynbar@mail.ru'
+EMAIL_HOST_PASSWORD = "uqszty6GVKuiSjBVmc39"
+DEFAULT_FROM_EMAIL = 'Todo <no-reply-orynbar@mail.ru>'
