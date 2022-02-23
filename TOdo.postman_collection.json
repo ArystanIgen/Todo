@@ -1,0 +1,564 @@
+{
+	"info": {
+		"_postman_id": "0c008a8a-f4af-439c-84a8-526d9a4ba2c8",
+		"name": "TOdo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "organization",
+			"item": [
+				{
+					"name": "CreateOrganization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"TestOrganization\",\r\n    \"address\": \"TestAdress\",\r\n    \"city\": \"Almaty\",\r\n    \"country\": \"Kazakhstan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListOrganization",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_host}}/organizations",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteOrganization",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_host}}/organizations/6dacf821-45f3-44ac-be45-d3e647c4e2ea/",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"6dacf821-45f3-44ac-be45-d3e647c4e2ea",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOrganization",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/8150d4e2-3f4e-4e2a-a02c-7c5454e05b59",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"8150d4e2-3f4e-4e2a-a02c-7c5454e05b59"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InviteOrganization",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"arystan.2000@mail.ru\",\r\n    \"group\":\"support\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/00c218c0-2b37-44db-b1a2-794c1d9238a6/invite",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"00c218c0-2b37-44db-b1a2-794c1d9238a6",
+								"invite"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "change_password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "old_password",
+									"value": "lwjfdkjskdfsdfsdpf",
+									"type": "text"
+								},
+								{
+									"key": "password1",
+									"value": "lev231029",
+									"type": "text"
+								},
+								{
+									"key": "password2",
+									"value": "lev231029",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/change_password/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"change_password",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Nursultan",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Zhenis",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+879999999",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/profile/4/update_profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"profile",
+								"4",
+								"update_profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration",
+					"request": {
+						"auth": {
+							"type": "apikey"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"username\":\"arystan\",\r\n        \"email\": \"arystan.2000@mail.ru\",\r\n        \"password\": \"somebody1232323\"\r\n        \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/auth/registration/",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"auth",
+								"registration",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/profile/2/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"profile",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json()\r",
+									"if(jsonData.token != null) {\r",
+									"\tpm.collectionVariables.set(\"token\", jsonData.token)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"rakhat\",\r\n    \"password\": \"somebody1232323\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/auth/login/",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "CreateTask",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Tashgugu33\",\r\n    \"expiry_date\": \"2022-02-23T17:34:15.220975Z\",\r\n    \"username\":\"arystan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/a3a623de-4465-43a9-a3ba-02e5f54eee7c/tasks",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"a3a623de-4465-43a9-a3ba-02e5f54eee7c",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RetrieveTask",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/9eece233-9d9c-4f0f-a87d-72b544a868b4/tasks/3d258fcd-6dd4-490f-acb2-f562c692b0d6",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"9eece233-9d9c-4f0f-a87d-72b544a868b4",
+								"tasks",
+								"3d258fcd-6dd4-490f-acb2-f562c692b0d6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTasks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"TestTask\",\r\n    \"expiry_date\": \"2022-02-23T15:18:15.220975Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/9eece233-9d9c-4f0f-a87d-72b544a868b4/tasks",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"9eece233-9d9c-4f0f-a87d-72b544a868b4",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTask",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_host}}/organizations/00c218c0-2b37-44db-b1a2-794c1d9238a6/tasks/5adf754c-56b3-4600-9c90-ba31bf874440",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"organizations",
+								"00c218c0-2b37-44db-b1a2-794c1d9238a6",
+								"tasks",
+								"5adf754c-56b3-4600-9c90-ba31bf874440"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_host",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
