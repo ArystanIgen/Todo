@@ -1,10 +1,12 @@
-from django.db import models
-from uuid import uuid4
-from django.contrib.auth.models import User, Group
-from organization.managers import OrganizationManager, TaskManager
-from django_celery_beat.models import PeriodicTask, ClockedSchedule
 import json
 from datetime import timedelta
+from uuid import uuid4
+
+from django.contrib.auth.models import Group, User
+from django.db import models
+from django_celery_beat.models import ClockedSchedule, PeriodicTask
+
+from organization.managers import OrganizationManager, TaskManager
 
 
 class Organization(models.Model):

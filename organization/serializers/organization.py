@@ -1,11 +1,14 @@
-from rest_framework import serializers
-from organization.models import Organization
-from django.contrib.auth.models import Group, User, Permission
-from auth_.serializers import UserSerializer
-from rest_framework_guardian.serializers import ObjectPermissionsAssignmentMixin
 from typing import Dict, List, Optional
-from organization.exceptions import UserNotFoundError, GroupNotFoundError
+
+from django.contrib.auth.models import Group, Permission, User
 from django.db.models import Q
+from rest_framework import serializers
+from rest_framework_guardian.serializers import \
+    ObjectPermissionsAssignmentMixin
+
+from auth_.serializers import UserSerializer
+from organization.exceptions import GroupNotFoundError, UserNotFoundError
+from organization.models import Organization
 
 
 class OrganizationSerializer(ObjectPermissionsAssignmentMixin, serializers.ModelSerializer):

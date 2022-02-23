@@ -1,6 +1,9 @@
 from django.urls import path
-from organization.views.organization import OrganizationDetailViewSet, OrganizationViewSet, OrganizationInviteViewSet
-from organization.views.project import ProjectViewSet, ProjectDetailViewSet
+
+from organization.views.organization import (OrganizationDetailViewSet,
+                                             OrganizationInviteViewSet,
+                                             OrganizationViewSet)
+from organization.views.project import ProjectDetailViewSet, ProjectViewSet
 
 app_name = 'organization'
 

@@ -1,5 +1,7 @@
-from celery import shared_task
 import logging
+
+from celery import shared_task
+
 from organization.send_email import EmailSender
 
 logger = logging.getLogger(__name__)

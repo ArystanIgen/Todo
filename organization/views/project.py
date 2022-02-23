@@ -1,17 +1,20 @@
 import logging
-from typing import Optional, List, Tuple, Any
-from rest_framework import viewsets
+from typing import Any, List, Optional, Tuple
+
+from django.contrib.auth.models import User
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework import status
-from rest_framework.serializers import ModelSerializer
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
-from organization.exceptions import OrganizationNotFoundError, ProjectNotFoundError, UserNotPartOfOrganizationError
-from organization.models import Organization, Project
-from organization.serializers.project import ProjectSerializer
-from organization.permissions import TaskObjectPermissions
+from rest_framework.serializers import ModelSerializer
 from rest_framework_guardian import filters
-from django.contrib.auth.models import User
+
+from organization.exceptions import (OrganizationNotFoundError,
+                                     ProjectNotFoundError,
+                                     UserNotPartOfOrganizationError)
+from organization.models import Organization, Project
+from organization.permissions import TaskObjectPermissions
+from organization.serializers.project import ProjectSerializer
 
 logger = logging.getLogger(__name__)
 

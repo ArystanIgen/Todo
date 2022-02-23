@@ -1,9 +1,11 @@
 # Standard Library
 import logging
 from typing import Optional
-from todo import settings
+
 from notifiers import get_notifier
 from notifiers.core import Response
+
+from todo import settings
 
 logger = logging.getLogger(__name__)
 
