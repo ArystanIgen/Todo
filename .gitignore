@@ -236,7 +236,7 @@ dbdata
 .idea
 .dbdata
 
-dokazhi.docker-compose.yml
+
 *.db
 local
 local-compose.yml

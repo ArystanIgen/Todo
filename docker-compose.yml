@@ -14,6 +14,8 @@ services:
     build: .
     volumes:
       - .:/todo_service
+    env_file:
+      - .env
     depends_on:
       - db
       - rabbitmq
@@ -41,6 +43,8 @@ services:
      build: .
      volumes:
         - .:/todo_service
+     env_file:
+       - .env
      environment:
         CELERY_BROKER_HOST: rabbitmq
         CELERY_BROKER_PORT: 5672
